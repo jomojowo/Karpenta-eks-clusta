@@ -1,4 +1,4 @@
-# AWS EKS cluster setup with Karpenter Autoscaler utilizing Graviton and x86 Spot instances
+# AWS EKS cluster setup with Karpenter Autoscaler to create Graviton and x86 Spot instances
 
 These Terraform automation will deploy an AWS EKS cluster in any specified AWS Region. 
 
