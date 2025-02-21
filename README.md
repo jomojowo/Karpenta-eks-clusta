@@ -1,13 +1,13 @@
-# AWS EKS cluster setup with Karpenter Autoscaler utilizing Graviton Spot instances
+# AWS EKS cluster setup with Karpenter Autoscaler utilizing Graviton and x86 Spot instances
 
 These Terraform automation will deploy an AWS EKS cluster in any specified AWS Region. 
 
 ## Features
-Nodepools and nodeclasses both for arm64 and x86 will be deployed. IRSA will use to for 
+Nodepools and nodeclasses both for arm64 and x86 will be deployed. IRSA will use for 
 generation of sts tokens that will be use to access EC2 and spot AWS service control planes.
 
 ## Pre-requisites
-Following binaries are needed on the automation system/pc.
+Following binaries and access are needed on the automation system/pc.
 
 * awscli version 2 (2.22.16) and later.
 * kubectl (1.26) and later.
@@ -31,7 +31,7 @@ Explanation:
 - cluster_vpc_id: eks vpc id that will be use for networking.
 - cluster_vpc_subnets: eks private subnets that will use for networking.
 - public_access: true/false, if public access is needed.
-- admin_cluster_permissions: true/false, if IAM user/role use to create eks cluster need's admin rights on cluster. 
+- admin_cluster_permissions: true/false, if the IAM user/role use to create eks cluster need's admin rights on cluster. 
 
 Example below: 
 
@@ -41,7 +41,7 @@ Example below:
 ```
 terraform init -upgrade -reconfigure
 ```
-4. Generate terraform plan file that will be applied to create new EKS cluster and it's resources. 
+4. Generate terraform plan file that will be applied to EKS service, so as to create new EKS cluster and it's resources. 
 ```
 terraform plan -var-file=variables/eks_initialization_test_recommended.tfvars.tf  -out=test-plan
 ```
@@ -71,7 +71,7 @@ Create/update $Home/.kube/config file with new EKS cluster kubeconfig. Replace "
 ```
 aws eks --region eu-west-1 update-kubeconfig --name "<cluster_name>"
 ```
-7. Apply sample deployment manifests in the examples folder.
+7. Apply sample deployment manifests in the examples folder and restart karpenter-controllers deployment.
 ```
 kubectl apply -f examples/nginx-x86.yaml
 kubectl apply -f examples/graviton-inflate.yaml
@@ -81,7 +81,7 @@ Step 7: Will create new spot instances both for x86 and graviton deployments.
 
 ## Cleanup Steps (Optional)
 
-1. Delete x86 and Graviton deployment(s), which will lead to termination of running spot instance(s) host the deployment pod(s).
+1. Delete x86 and Graviton deployment(s), which will lead to termination of running spot instance(s) hosting the deployment pod(s).
 Example deployments used in the below command.
 ```
 kubectl delete -f examples/nginx-x86.yaml
