@@ -67,8 +67,3 @@ variable "karpenter_namespace" {
   type = string
   description = "Name of namespace to deploy karpenter into."
 }
-
-variable "custom_x86_node_labels" {
-  type = string
-  description = "Custom labels that will be use to match deployment(s) to right nodepool(s)."
-}

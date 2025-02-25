@@ -24,6 +24,6 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: "opsfleet-team"
+                - key: "kubernetes.io/arch"
                   operator: "In"
-                  values: ["team-X"]
+                  values: ["amd64"]

@@ -2,7 +2,7 @@ cluster_name                = ""
 cluster_version             = "1.32"
 cluster_cmk_key             = false
 cluster_vpc_id              = ""
-cluster_vpc_subnets         = ["", ""]
+cluster_vpc_subnets         = [""]
 
 public_access               = true
 admin_cluster_permissions   = true
@@ -25,6 +25,4 @@ karpenter_helm_configs      = {
   sa_creation               = true
 }
 karpenter_sa_name           = "karpenter-sa"
-
-custom_x86_node_labels = "team-X"
 

@@ -154,17 +154,18 @@ resource "aws_iam_role_policy_attachment" "karpenter" {
   policy_arn = aws_iam_policy.karpenter.arn
 }
 
-
-resource "kubectl_manifest" "karpenter_sa" {
-  yaml_body = <<YAML
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: ${var.karpenter_sa_name}
-  namespace: ${var.karpenter_namespace}
-  annotations:
-    eks.amazonaws.com/role-arn: "${aws_iam_role.karpenter_irsa_role.arn}"
-YAML
+# Annotate the Karpenter Controller(s) ServiceAccounts with IRSA role.
+resource "kubernetes_annotations" "karpenter_sa_annotate" {
+  api_version = "v1"
+  kind        = "ServiceAccount"
+  metadata {
+    name = var.karpenter_sa_name
+    namespace = var.karpenter_namespace
+  }
+  # These annotations will be applied Karpenter Controller service-account resource itself
+  annotations = {
+     "eks.amazonaws.com/role-arn" = aws_iam_role.karpenter_irsa_role.arn
+  }
 
   depends_on = [helm_release.karpenter]
 }

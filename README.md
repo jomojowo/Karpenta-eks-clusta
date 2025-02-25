@@ -52,7 +52,14 @@ terraform apply "test-plan"
 
 KEYWORD for Graviton (arm64) Deployment manifest(s): 
 ```
-    kubernetes.io/arch: arm64
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: "kubernetes.io/arch"
+                  operator: "In"
+                  values: ["arm64"]
 ```
 KeyWord for x86 (amd64) Deployment manifest(s):
 ```
@@ -61,9 +68,9 @@ KeyWord for x86 (amd64) Deployment manifest(s):
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: "opsfleet-team"
+                - key: "kubernetes.io/arch"
                   operator: "In"
-                  values: ["team-X"]
+                  values: ["amd64"]
 ```
 
 6. Testing keyWords with sample deployments in examples folder, i.e., nginx-x86.yaml, graviton-inflate.yaml
